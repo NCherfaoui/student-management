@@ -94,13 +94,13 @@ mvn test
 
 ## Project Structure
 
-- `src/main/java/com/example/studentmanagement`: Contains the main application code
+- `src/main/java/com/nc/studentmanagement`: Contains the main application code
   - `controller`: REST controllers
   - `model`: Data models
   - `repository`: Database repositories
   - `service`: Business logic
   - `config`: Configuration classes
-- `src/test/java/com/example/studentmanagement`: Contains the test classes
+- `src/test/java/com/nc/studentmanagement`: Contains the test classes
 
 ## Contributing
 
