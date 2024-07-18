@@ -1,11 +1,55 @@
+
 services:
-  mongodb:
+  mongo1:
+    container_name: mongo1
     image: mongo:latest
-    container_name: mongodb
+    volumes:
+      - ./data/mongo1:/data/db
+      - ./rs-init.sh:/scripts/rs-init.sh
+    networks:
+      - app-network
     ports:
       - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
 
-volumes:
-  mongodb_data:
+  mongo2:
+    container_name: mongo2
+    image: mongo:latest
+    volumes:
+      - ./data/mongo2:/data/db
+    networks:
+      - app-network
+    ports:
+      - "27018:27017"
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+
+  mongo3:
+    container_name: mongo3
+    image: mongo:latest
+    volumes:
+      - ./data/mongo3:/data/db
+    networks:
+      - app-network
+    ports:
+      - "27019:27017"
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+
+  student-management-app:
+    build: .
+    ports:
+      - "8088:8080"
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+    networks:
+      - app-network
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo1:27017,mongo2:27017,mongo3:27017/studentdb?replicaSet=rs0
+
+networks:
+  app-network:
+    driver: bridge
