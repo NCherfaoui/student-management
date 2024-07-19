@@ -1,7 +1,7 @@
 #!/bin/bash
 
-mongo --host mongo1:27017 <<EOF
-var config = {
+mongosh  <<EOF
+ config = {
     "_id": "rs0",
     "members": [
         {
@@ -18,6 +18,6 @@ var config = {
         }
     ]
 };
-rs.initiate(config);
+rs.initiate();
 rs.status();
 EOF
