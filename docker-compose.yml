@@ -12,12 +12,29 @@ services:
     restart: always
     entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
 
+  mongo-init:
+    container_name: mongo-init
+    image: mongo:latest
+    volumes:
+      - ./init-replica-set.sh:/scripts/init-replica-set.sh
+    networks:
+      - app-network
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+    ports:
+      - "27017:27017"
+    restart: always
+    command: [ "bash", "-c", "sleep 10 && /bin/bash /scripts/init-replica-set.sh" ]
+
+
   mongo2:
     container_name: mongo2
     image: mongo:latest
     volumes:
       - ./data/mongo2:/data/db
-      - ./rs-init.sh:/scripts/rs-init.sh
+      - ./init-replica-set.sh:/scripts/init-replica-set.sh
     networks:
       - app-network
     ports:
@@ -48,6 +65,7 @@ services:
       - mongo3
     networks:
       - app-network
+    restart: always
     environment:
       - SPRING_DATA_MONGODB_URI=mongodb://mongo1:27017,mongo2:27017,mongo3:27017/studentdb?replicaSet=rs0
 

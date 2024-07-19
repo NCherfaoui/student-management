@@ -1,7 +1,6 @@
 #!/bin/bash
-
 mongosh  <<EOF
- config = {
+rs.initiate({
     "_id": "rs0",
     "members": [
         {
@@ -17,7 +16,6 @@ mongosh  <<EOF
             "host": "mongo3:27017"
         }
     ]
-};
-rs.initiate();
+});
 rs.status();
 EOF
