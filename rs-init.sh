@@ -1,7 +1,6 @@
 #!/bin/bash
-
-mongosh  <<EOF
- config = {
+mongosh --host mongo2:27017 <<EOF
+config = {
     "_id": "rs0",
     "members": [
         {
