@@ -16,7 +16,6 @@ config = {
             "host": "mongo3:27017"
         }
     ]
-};
-rs.initiate();
+});
 rs.status();
 EOF
